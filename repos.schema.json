@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Multi-repo workspace manifest",
+  "type": "object",
+  "required": [
+    "repos"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "workspaceName": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9._-]+$",
+      "description": "Prefix for generated <workspaceName>[.<Name>].local.code-workspace files and the display name of this hub folder. Defaults to the hub folder name."
+    },
+    "extensions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$"
+      },
+      "uniqueItems": true,
+      "description": "VS Code extension IDs recommended in the generated workspace."
+    },
+    "reposDir": {
+      "type": "string",
+      "default": "repos",
+      "description": "Folder (relative to hub repo root) where repos are cloned. Must be gitignored."
+    },
+    "worktreesDir": {
+      "type": "string",
+      "default": "worktrees",
+      "description": "Folder (relative to hub repo root) for git worktrees. Must be gitignored."
+    },
+    "repos": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "url",
+          "defaultBranch"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._-]+$",
+            "description": "Folder name and workspace folder name. Unique."
+          },
+          "url": {
+            "type": "string",
+            "description": "Git clone URL (https or ssh)."
+          },
+          "defaultBranch": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true,
+            "description": "Used with -Tag to build focused workspaces (e.g. ui, api, dotnet)."
+          },
+          "docs": {
+            "type": "string",
+            "description": "Path (relative to the hub repo) to this repo's overview doc, read by AI agents."
+          },
+          "optional": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, only cloned when selected explicitly via -Only or -Tag."
+          }
+        }
+      }
+    }
+  }
+}

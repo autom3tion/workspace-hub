@@ -1,0 +1,96 @@
+{
+  // Run via: Cmd/Ctrl+Shift+P -> "Tasks: Run Task" -> pick one below.
+  // Requires PowerShell 7+ (`pwsh`) on PATH; Windows PowerShell 5.1 lacks GetRelativePath.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Workspace: Sync repos + regenerate workspace",
+      "detail": "Clone/pull repos for a tag, then write <workspaceName>[.<tag>].local.code-workspace",
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-File", "${workspaceFolder}/scripts/setup.ps1",
+        "-Tag", "${input:tag}",
+        "-Name", "${input:tag}"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Workspace: Regenerate workspace only (no git)",
+      "detail": "Rebuild the .code-workspace from what is already cloned",
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-File", "${workspaceFolder}/scripts/setup.ps1",
+        "-NoGit",
+        "-Tag", "${input:tag}",
+        "-Name", "${input:tag}"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Workspace: Sync + open workspace",
+      "detail": "Same as sync, then opens the generated workspace in a new VS Code window",
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-File", "${workspaceFolder}/scripts/setup.ps1",
+        "-Tag", "${input:tag}",
+        "-Name", "${input:tag}",
+        "-Open"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Workspace: Sync specific repos",
+      "detail": "Comma-separated repo names, e.g. web-app,shared-lib",
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-File", "${workspaceFolder}/scripts/setup.ps1",
+        "-Only", "${input:repos}",
+        "-Name", "${input:name}"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    }
+  ],
+  "inputs": [
+    {
+      // Keep in sync with the tags used in repos.json. Empty = all non-optional repos.
+      "id": "tag",
+      "type": "pickString",
+      "description": "Which repos? (tag)",
+      "options": [
+        { "label": "all (non-optional)", "value": "" },
+        "frontend",
+        "backend",
+        "lib",
+        "tests"
+      ],
+      "default": ""
+    },
+    {
+      "id": "repos",
+      "type": "promptString",
+      "description": "Repo names (comma-separated, as in repos.json)"
+    },
+    {
+      "id": "name",
+      "type": "promptString",
+      "description": "Suffix -> <workspaceName>.<name>.local.code-workspace (empty = no suffix)",
+      "default": ""
+    }
+  ]
+}

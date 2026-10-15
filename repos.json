@@ -1,0 +1,43 @@
+{
+  "$schema": "./repos.schema.json",
+  "reposDir": "repos",
+  "worktreesDir": "worktrees",
+  "extensions": [
+    "editorconfig.editorconfig"
+  ],
+  "repos": [
+    {
+      "name": "web-app",
+      "url": "https://github.com/your-org/web-app.git",
+      "defaultBranch": "main",
+      "description": "Frontend application",
+      "tags": ["frontend"],
+      "docs": "docs/projects/web-app.md"
+    },
+    {
+      "name": "api-service",
+      "url": "https://github.com/your-org/api-service.git",
+      "defaultBranch": "main",
+      "description": "Backend HTTP API",
+      "tags": ["backend"],
+      "docs": "docs/projects/api-service.md"
+    },
+    {
+      "name": "shared-lib",
+      "url": "https://github.com/your-org/shared-lib.git",
+      "defaultBranch": "main",
+      "description": "Library consumed by web-app and api-service",
+      "tags": ["frontend", "backend", "lib"],
+      "docs": "docs/projects/shared-lib.md"
+    },
+    {
+      "name": "e2e-tests",
+      "url": "https://github.com/your-org/e2e-tests.git",
+      "defaultBranch": "main",
+      "description": "End-to-end tests against web-app and api-service",
+      "tags": ["tests"],
+      "docs": "docs/projects/e2e-tests.md",
+      "optional": true
+    }
+  ]
+}
